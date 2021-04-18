@@ -4,6 +4,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.dummy import DummyClassifier
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
+from sklearn.externals import joblib
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report, accuracy_score, f1_score, precision_score, recall_score, confusion_matrix
 import seaborn as sns
@@ -82,6 +83,22 @@ print('')
 
 for name, (model, parameters) in models.items():
     print('Results for \"' + str(name) + '\"')
-    model = model.fit(X_train, y_train)
-    test(X_test, y_test, model)
+    gs = GridSearchCV(model, parameters, cv=10, verbose=0, n_jobs=-1, scoring='f1')
+    gs.fit(X_train, y_train)
+    print("Best Parameters:", gs.best_params_)
+    print("")
+    print("Best Score:", gs.best_score_)
+
+    joblib.dump(gs.best_estimator_, f"{name}.pkl", compress=1)
+    joblib.dump(gs.cv_results_, f"{name}_results.pkl", compress=1)
+
+    y_pred = gs.predict(X_test)
+
+    print("")
+    print("Accuracy Score:", accuracy_score(y_test, y_pred))
+    print("Precision Score : ", precision_score(y_test, y_pred))
+    print("Recall Score:", recall_score(y_test, y_pred))
+    print("f1 Score:", f1_score(y_test, y_pred))
+    #model = model.fit(X_train, y_train)
+    #test(X_test, y_test, model)
     print('------------------------------------')
