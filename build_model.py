@@ -4,7 +4,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.dummy import DummyClassifier
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
-from sklearn.externals import joblib
+import joblib
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report, accuracy_score, f1_score, precision_score, recall_score, confusion_matrix
 import seaborn as sns
@@ -55,13 +55,15 @@ test_real = pd.read_csv(pathToData + 'celebritiesAfterProcessing.csv')
 
 data = pd.concat((bots, real), axis=0)
 data.to_excel('bots_and_humans.xls')
+data = data.sample(frac=1)
+data.to_excel('bots_and_humans_mixed.xls')
 
 X, y = splitData(data)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 numberOfAllAccounts = np.array(y_train).size
-numberOfHumans = np.count_nonzero(np.array(y_train))
-numberOfBots = numberOfAllAccounts - numberOfHumans
+numberOfBots = np.count_nonzero(np.array(y_train))
+numberOfHumans = numberOfAllAccounts - numberOfBots
 print('Number of bots in train data set: ' + str(numberOfBots))
 print('Number of humans in train data set: ' + str(numberOfHumans))
 print('Bots: {0}%, humans: {1}%'.format(numberOfBots/numberOfAllAccounts*100, numberOfHumans/numberOfAllAccounts*100))

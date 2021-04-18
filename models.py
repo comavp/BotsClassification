@@ -35,7 +35,7 @@ class Models:
 
 				}
 			),
-			"Nearest Neighbour": (
+			"Nearest Neighbor": (
 				KNeighborsClassifier(),
 				{
 
