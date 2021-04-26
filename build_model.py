@@ -13,6 +13,8 @@ from models import Models
 
 
 pathToData = 'dataAfterProcessingCSV/'
+pathToPictures = 'pictures/'
+pathToModels = 'models/'
 models = Models().models
 
 
@@ -26,7 +28,7 @@ def print_result(cm_test, title):
     plt.ylabel("Actual ")
     plt.xlabel("Predicted ")
     plt.tight_layout()
-    plt.savefig(title + ".png")
+    plt.savefig(pathToPictures + title + ".png")
     plt.show()
 
 
@@ -70,11 +72,11 @@ print('Bots: {0}%, humans: {1}%'.format(numberOfBots/numberOfAllAccounts*100, nu
 print('')
 
 # decisionTree = DecisionTreeClassifier().fit(X_train, y_train)
-# dummyClassifier = DummyClassifier(strategy='stratified', random_state=432).fit(X_train, y_train)
-#
 # print_result(test(X_test, y_test, decisionTree), 'First test DecisionTree')
-# print_result(test(X_test, y_test, dummyClassifier), 'First test Dummy')
-#
+
+dummyClassifier = DummyClassifier(strategy='stratified', random_state=432).fit(X_train, y_train)
+print_result(test(X_test, y_test, dummyClassifier), 'First test Dummy')
+
 # X_test, y_test = splitData(test_bots)
 # print_result(test(X_test, y_test, decisionTree), 'Political bots DecisionTree')
 # print_result(test(X_test, y_test, dummyClassifier), 'Political bots Dummy')
@@ -85,14 +87,14 @@ print('')
 
 for name, (model, parameters) in models.items():
     print('Results for \"' + str(name) + '\"')
-    gs = GridSearchCV(model, parameters, cv=10, verbose=0, n_jobs=-1, scoring='f1')
+    gs = GridSearchCV(model, parameters, cv=10, verbose=1, n_jobs=-1, scoring='f1')
     gs.fit(X_train, y_train)
     print("Best Parameters:", gs.best_params_)
     print("")
     print("Best Score:", gs.best_score_)
 
-    joblib.dump(gs.best_estimator_, f"{name}.pkl", compress=1)
-    joblib.dump(gs.cv_results_, f"{name}_results.pkl", compress=1)
+    joblib.dump(gs.best_estimator_, pathToModels + f"{name}.pkl", compress=1)
+    joblib.dump(gs.cv_results_, pathToModels + f"{name}_results.pkl", compress=1)
 
     y_pred = gs.predict(X_test)
 
