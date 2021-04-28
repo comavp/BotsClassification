@@ -2,6 +2,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import LinearSVC, SVC
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neural_network import MLPClassifier
 
 
 class Models:
@@ -45,6 +46,14 @@ class Models:
 					"leaf_size": [range(1, 50)],
 					"weights": ['uniform', 'distance'],
 					"metric": ['minkowski', 'chebyshev']
+				}
+			),
+			"Neural Network": (
+				MLPClassifier(),
+				{
+					"solver": ['lbfgs', 'sgd', 'adam'],
+					"hidden_layer_sizes": [(10,), (13,), (15,), (20, 15, 2)],
+					"learning_rate": ['constant', 'invscaling', 'adaptive']
 				}
 			)
 		}
