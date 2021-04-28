@@ -75,7 +75,7 @@ print('')
 # print_result(test(X_test, y_test, decisionTree), 'First test DecisionTree')
 
 dummyClassifier = DummyClassifier(strategy='stratified', random_state=432).fit(X_train, y_train)
-print_result(test(X_test, y_test, dummyClassifier), 'First test Dummy')
+#print_result(test(X_test, y_test, dummyClassifier), 'First test Dummy')
 
 # X_test, y_test = splitData(test_bots)
 # print_result(test(X_test, y_test, decisionTree), 'Political bots DecisionTree')
@@ -87,7 +87,7 @@ print_result(test(X_test, y_test, dummyClassifier), 'First test Dummy')
 
 for name, (model, parameters) in models.items():
     print('Results for \"' + str(name) + '\"')
-    gs = GridSearchCV(model, parameters, cv=10, verbose=1, n_jobs=-1, scoring='f1')
+    gs = GridSearchCV(model, parameters, cv=10, verbose=0, n_jobs=-1, scoring='f1')
     gs.fit(X_train, y_train)
     print("Best Parameters:", gs.best_params_)
     print("")
@@ -96,13 +96,13 @@ for name, (model, parameters) in models.items():
     joblib.dump(gs.best_estimator_, pathToModels + f"{name}.pkl", compress=1)
     joblib.dump(gs.cv_results_, pathToModels + f"{name}_results.pkl", compress=1)
 
-    y_pred = gs.predict(X_test)
+    #y_pred = gs.predict(X_test)
 
     print("")
-    print("Accuracy Score:", accuracy_score(y_test, y_pred))
-    print("Precision Score : ", precision_score(y_test, y_pred))
-    print("Recall Score:", recall_score(y_test, y_pred))
-    print("f1 Score:", f1_score(y_test, y_pred))
-    #model = model.fit(X_train, y_train)
-    #test(X_test, y_test, model)
+    # print("Accuracy Score:", accuracy_score(y_test, y_pred))
+    # print("Precision Score : ", precision_score(y_test, y_pred))
+    # print("Recall Score:", recall_score(y_test, y_pred))
+    # print("f1 Score:", f1_score(y_test, y_pred))
+    model = model.fit(X_train, y_train)
+    print_result(test(X_test, y_test, model), name)
     print('------------------------------------')
