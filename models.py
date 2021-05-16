@@ -11,7 +11,8 @@ class Models:
 			"DummyClassifier": (
 				DummyClassifier(),
 				{
-
+					"strategy": ['stratified'],
+					"random_state": [432]
 				}
 			),
 			"RandomForest": (

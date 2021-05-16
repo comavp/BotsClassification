@@ -42,7 +42,7 @@ def get_confusion_matrix(X_test, y_test, classifier):
     # print(matrix)
     print("Accuracy Score:", accuracy_score(y_test, y_pred))
     print("Precision Score : ", precision_score(y_test, y_pred))
-    print("Recall Score:", recall_score(y_test, y_pred, zero_division=1))
+    print("Recall Score:", recall_score(y_test, y_pred))
     print("f1 Score:", f1_score(y_test, y_pred))
     return matrix
 
@@ -92,10 +92,6 @@ def build_and_evaluate_models(data):
         y_pred = gs.predict(X_test)
 
         print("")
-        print("Accuracy Score:", accuracy_score(y_test, y_pred))
-        print("Precision Score : ", precision_score(y_test, y_pred))
-        print("Recall Score:", recall_score(y_test, y_pred))
-        print("f1 Score:", f1_score(y_test, y_pred))
         model = model.fit(X_train, y_train)
         show_confusion_matrix(get_confusion_matrix(X_test, y_test, model), name)
         print('------------------------------------')
