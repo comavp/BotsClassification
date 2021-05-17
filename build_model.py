@@ -22,8 +22,7 @@ def print_model(modelResultPath):
 
 
 def show_confusion_matrix(cm_test, title):
-    print('Results for \"' + str(title) + '\"')
-    print('------------------------------------')
+    print('Print confusion matrix for \"' + str(title) + '\"')
     plt.figure(figsize=(8,8))
     sns.heatmap(cm_test, annot=True, fmt="d", cmap="Blues")
     sns.set(font_scale=1.9)
@@ -89,11 +88,8 @@ def build_and_evaluate_models(data):
         joblib.dump(gs.best_estimator_, pathToModels + f"{name}.pkl", compress=1)
         joblib.dump(gs.cv_results_, pathToModels + f"{name}_results.pkl", compress=1)
 
-        y_pred = gs.predict(X_test)
-
         print("")
-        model = model.fit(X_train, y_train)
-        show_confusion_matrix(get_confusion_matrix(X_test, y_test, model), name)
+        show_confusion_matrix(get_confusion_matrix(X_test, y_test, gs), name)
         print('------------------------------------')
 
 

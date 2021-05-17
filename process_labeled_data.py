@@ -26,8 +26,12 @@ botsLabelsFileName = pathToData + 'botwiki-2019.tsv'
 
 politicalBotsFileName = pathToData + 'political-bots-2019_tweets.json'
 celebrityFileName = pathToData + 'celebrity-2019_tweets.json'
+pronBotsFileName = pathToData + 'pronbots-2019_tweets.json'
+vendorFileName = pathToData + 'vendor-purchased-2019_tweets.json'
 politicalBotsLabelsFileName = pathToData + 'political-bots-2019.tsv'
 celebrityLabelsFileName = pathToData + 'celebrity-2019.tsv'
+pronBotsLabelsFileName = pathToData + 'pronbots-2019.tsv'
+vendorLabelsFileName = pathToData + 'vendor-purchased-2019.tsv'
 
 
 def getIntFromBoolean(boolValue):
@@ -123,23 +127,31 @@ def saveData(data, name, before_or_after):
 beforeName = 'BeforeProcessing'
 afterName = 'AfterProcessing'
 
-bots = getDataFromJsonAndTsv(botsDataFileName, botsLabelsFileName, 'bot')
-humans = getDataFromJsonAndTsv(trueDataFileName, trueLabelsFileName, 'human')
-celebrities = getDataFromJsonAndTsv(celebrityFileName, celebrityLabelsFileName, 'human')
-politicalBots = getDataFromJsonAndTsv(politicalBotsFileName, politicalBotsLabelsFileName, 'bot')
-saveData(bots, 'bots' + beforeName, 'before')
-saveData(humans, 'humans' + beforeName, 'before')
-saveData(celebrities, 'celebrities' + beforeName, 'before')
-saveData(politicalBots, 'politicalBots' + beforeName, 'before')
+# bots = getDataFromJsonAndTsv(botsDataFileName, botsLabelsFileName, 'bot')
+# humans = getDataFromJsonAndTsv(trueDataFileName, trueLabelsFileName, 'human')
+# celebrities = getDataFromJsonAndTsv(celebrityFileName, celebrityLabelsFileName, 'human')
+# politicalBots = getDataFromJsonAndTsv(politicalBotsFileName, politicalBotsLabelsFileName, 'bot')
+pronBots = getDataFromJsonAndTsv(pronBotsFileName, pronBotsLabelsFileName, 'bot')
+vendorBots = getDataFromJsonAndTsv(vendorFileName, vendorLabelsFileName, 'bot')
+# saveData(bots, 'bots' + beforeName, 'before')
+# saveData(humans, 'humans' + beforeName, 'before')
+# saveData(celebrities, 'celebrities' + beforeName, 'before')
+# saveData(politicalBots, 'politicalBots' + beforeName, 'before')
+saveData(pronBots, 'pronBots' + beforeName, 'before')
+saveData(vendorBots, 'vendorBots' + beforeName, 'before')
 
-botsFinalData = createFinalDataFrom(bots, 'bot')
-humansFinalData = createFinalDataFrom(humans, 'human')
-celebritiesFinalData = createFinalDataFrom(celebrities, 'human')
-politicalBotsFinalData = createFinalDataFrom(politicalBots, 'bot')
-saveData(botsFinalData, 'bots' + afterName, 'after')
-saveData(humansFinalData, 'humans' + afterName, 'after')
-saveData(celebritiesFinalData, 'celebrities' + afterName, 'after')
-saveData(politicalBotsFinalData, 'politicalBots' + afterName, 'after')
+# botsFinalData = createFinalDataFrom(bots, 'bot')
+# humansFinalData = createFinalDataFrom(humans, 'human')
+# celebritiesFinalData = createFinalDataFrom(celebrities, 'human')
+# politicalBotsFinalData = createFinalDataFrom(politicalBots, 'bot')
+pronBotsFinalData = createFinalDataFrom(pronBots, 'bot')
+vendorBotsFinalData = createFinalDataFrom(vendorBots, 'bot')
+# saveData(botsFinalData, 'bots' + afterName, 'after')
+# saveData(humansFinalData, 'humans' + afterName, 'after')
+# saveData(celebritiesFinalData, 'celebrities' + afterName, 'after')
+# saveData(politicalBotsFinalData, 'politicalBots' + afterName, 'after')
+saveData(pronBotsFinalData, 'pronBots' + afterName, 'after')
+saveData(vendorBotsFinalData, 'vendorBots' + afterName, 'after')
 
 
 
