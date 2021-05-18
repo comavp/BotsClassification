@@ -55,8 +55,6 @@ def split_data(pandas_data):
 def read_data():
     bots = pd.read_csv(pathToData + 'botsAfterProcessing.csv')
     real = pd.read_csv(pathToData + 'humansAfterProcessing.csv')
-    test_bots = pd.read_csv(pathToData + 'politicalBotsAfterProcessing.csv')
-    test_real = pd.read_csv(pathToData + 'celebritiesAfterProcessing.csv')
 
     data = pd.concat((bots, real), axis=0)
     data.to_excel('bots_and_humans.xls')
@@ -77,6 +75,9 @@ def build_and_evaluate_models(data):
     print('Bots: {0}%, humans: {1}%'.format(numberOfBots/numberOfAllAccounts*100, numberOfHumans/numberOfAllAccounts*100))
     print('')
 
+    bestScore = 0
+    bestAlgName = ''
+
     for name, (model, parameters) in models.items():
         print('Results for \"' + str(name) + '\"')
         gs = GridSearchCV(model, parameters, cv=10, verbose=0, n_jobs=-1, scoring='f1')
@@ -88,11 +89,38 @@ def build_and_evaluate_models(data):
         joblib.dump(gs.best_estimator_, pathToModels + f"{name}.pkl", compress=1)
         joblib.dump(gs.cv_results_, pathToModels + f"{name}_results.pkl", compress=1)
 
+        y_pred = gs.predict(X_test)
+        f1 = f1_score(y_test, y_pred)
+        if bestScore < f1:
+            bestScore = f1
+            bestAlgName = name
+
         print("")
         show_confusion_matrix(get_confusion_matrix(X_test, y_test, gs), name)
         print('------------------------------------')
 
+    print('"' + bestAlgName + '" ' + 'showed best results')
+    print('f1 score: ' + str(bestScore))
+    return bestAlgName
+
+
+def test_model_on_unseen_data(model_name):
+    political_bots = pd.read_csv(pathToData + 'politicalBotsAfterProcessing.csv')
+    real = pd.read_csv(pathToData + 'celebritiesAfterProcessing.csv')
+    pron_bots = pd.read_csv(pathToData + 'pronBotsAfterProcessing.csv')
+    vendor_bots = pd.read_csv(pathToData + 'vendorBotsAfterProcessing.csv')
+
+    unseen_data = pd.concat((political_bots, real, pron_bots, vendor_bots), axis=0).sample(frac=1)
+    data.to_excel('unseen_data.xls')
+
+    X, y = split_data(unseen_data)
+    best_model = joblib.load(pathToModels + model_name + '.pkl')
+
+    show_confusion_matrix(get_confusion_matrix(X, y, best_model), 'RandomForestUnseenData')
+
 
 if __name__ == '__main__':
     data = read_data()
-    build_and_evaluate_models(data)
+    #model_name = build_and_evaluate_models(data)
+    model_name = 'RandomForest'
+    test_model_on_unseen_data(model_name)
