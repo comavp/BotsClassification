@@ -110,17 +110,27 @@ def test_model_on_unseen_data(model_name):
     pron_bots = pd.read_csv(pathToData + 'pronBotsAfterProcessing.csv')
     vendor_bots = pd.read_csv(pathToData + 'vendorBotsAfterProcessing.csv')
 
-    unseen_data = pd.concat((political_bots, real, pron_bots, vendor_bots), axis=0).sample(frac=1)
-    data.to_excel('unseen_data.xls')
+    #unseen_data = pd.concat((political_bots, real, pron_bots, vendor_bots), axis=0).sample(frac=1)
+    #unseen_data.to_excel('unseen_data.xls')
 
-    X, y = split_data(unseen_data)
+    real_and_political_bots = pd.concat((political_bots, real), axis=0).sample(frac=1)
+    real_and_pron_bots = pd.concat((pron_bots, real), axis=0).sample(frac=1)
+    real_and_vendor_bots = pd.concat((vendor_bots, real), axis=0).sample(frac=1)
+
     best_model = joblib.load(pathToModels + model_name + '.pkl')
 
-    show_confusion_matrix(get_confusion_matrix(X, y, best_model), 'RandomForestUnseenData')
+    X, y = split_data(real_and_political_bots)
+    show_confusion_matrix(get_confusion_matrix(X, y, best_model), model_name + 'CelebritiesAndPoliticalBots')
+
+    X, y = split_data(real_and_pron_bots)
+    show_confusion_matrix(get_confusion_matrix(X, y, best_model), model_name + 'CelebritiesAndPronBots')
+
+    X, y = split_data(real_and_vendor_bots)
+    show_confusion_matrix(get_confusion_matrix(X, y, best_model), model_name + 'CelebritiesAndVendorBots')
 
 
 if __name__ == '__main__':
-    data = read_data()
+    #data = read_data()
     #model_name = build_and_evaluate_models(data)
     model_name = 'RandomForest'
     test_model_on_unseen_data(model_name)
