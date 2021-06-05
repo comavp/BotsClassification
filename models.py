@@ -43,7 +43,7 @@ class Models:
 				SVC(),
 				{
 					"C": [0.001, 0.1, 1, 5, 10, 50, 100],
-					"gamma": ['scale', 'auto', 1, 5, 10]
+					"gamma": ['scale', 'auto', 0.0001, 0.001, 0.01, 0.05, 0.1, 1, 5, 10]
 				}
 			),
 			"K-Nearest Neighbors": (
@@ -56,7 +56,7 @@ class Models:
 					"metric": ['minkowski', 'chebyshev']
 				}
 			),
-			"Neural Network": (
+			"Multilayer Perceptron": (
 				MLPClassifier(),
 				{
 					"solver": ['lbfgs', 'sgd', 'adam'],
